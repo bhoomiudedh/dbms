@@ -1,3 +1,4 @@
+
 create database bhoomi066;
 use bhoomi066;
 create table project(
@@ -150,3 +151,4 @@ where e.empno in (select empno from assigned_to where empno=e.empno and job_role
 select deptno,avg(sal) as average
 from employee
 group by deptno;
+
