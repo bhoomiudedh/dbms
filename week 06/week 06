@@ -1,0 +1,152 @@
+create database bhoomi066;
+use bhoomi066;
+create table project(
+pno int,
+ploc varchar(50),
+pname varchar(50),
+primary key (pno));
+
+create table dept(
+deptno int primary key,
+dname varchar(50),
+dloc varchar(50));
+
+create table employee(
+empno int primary key,
+empname varchar(50),
+mgr_no int,
+hiredate date,
+sal int,
+deptno int,
+foreign key (deptno) references dept (deptno));
+
+create table incentives(
+empno int ,
+incentive_date date ,
+incentive_amt int,
+primary key(empno,incentive_date),
+foreign key (empno) references employee (empno));
+
+create table assigned_to(
+empno int,
+pno int,
+job_role varchar (50),
+primary key (empno, pno),
+foreign key (empno) references employee(empno),
+foreign key (pno) references project (pno));
+
+insert into project
+values(01,'bengaluru','apx'),
+(02,'mysuru','bdx'),
+(03,'hyderabad','aap'),
+(04,'delhi','ccg'),
+(05,'bengaluru','fpg'),
+(06,'chennai','express');
+
+insert into dept
+values(01,'cse','bengaluru'),
+(02,'ise','mysuru'),
+(03,'cse','delhi'),
+(04,'ise','hyderabad'),
+(05,'hr','bengaluru'),
+(06,'managers','mysuru');
+
+insert into employee
+values (1,'bhoomika',3,'2015-04-19',15000,05),
+(2,'bhoomi',7,'2016-07-20',70000,02),
+(3,'divya',NULL,'2000-07-22',10000,05),
+(4,'prethi',3,'2028-10-02',10000,05),
+(5,'jyothi',7,'2020-11-18',8000,02),
+(6,'depthi',8,'2024-07-03',7000,03),
+(7,'keerthi',NULL,'1998-01-01',80000,02),
+(8,'stuthi',NULL,'2010-10-10',50000,03);
+
+insert into incentives
+values(4,'2020-11-12',3000),
+(8,'2015-07-30',4000),
+(7,'2010-10-14',5000),
+(7,'2015-07-24',7000),
+(2,'2020-11-30',3000);
+
+insert into assigned_to
+values(7,02,'manager'),
+(8,01,'data analyst'),
+(3,04,'worker'),
+(2, 06,'worker'),
+(4,05,'app developer'),
+(8,04,'worker'),
+(1,01,'worker'),
+(5,03,'worker'),
+(6,03,'head');
+
+select e.empno
+from employee e, assigned_to a
+where e.empno=a.empno and a.pno in(select pno
+                                   from project
+  where ploc in ('bengaluru' ,' hyderabad',' mysuru'));
+                                   
+select empname
+from employee
+where not exists(select 1
+                 from incentives
+                 where empno=employee.empno);
+                 
+select e.empno, e.empname, d.deptno, a.job_role, d.dloc ,p.ploc
+from employee e, project p,  assigned_to a, dept d
+where e.empno=a.empno and p.pno=a.pno and e.deptno=d.deptno and d.dloc=p.ploc;
+select * from assigned_to;
+
+
+select e.empname,p.*
+from employee e, project p, assigned_to a
+where e.empno=a.empno and p.pno=a.pno;
+
+select i.empno,e.empname,sum(i.incentive_amt)as total_incentive
+from incentives i,employee e
+where i.empno=e.empno
+group by empno;
+
+
+select p.pname,p.ploc
+from project p
+where pno in(select pno from assigned_to a where job_role='manager');
+
+
+select d.dname,count(e.empno)
+from dept d,employee e
+where d.deptno=e.deptno
+group by d.dname;
+
+
+select e.empno,e.empname
+from employee e
+where not exists(select 1 from assigned_to a where e.empno=a.empno);
+
+
+select e.empname,d.deptno,d.dloc
+from employee e,dept d
+where e.deptno=d.deptno;
+
+
+select *
+from employee e
+where mgr_no=7;
+
+select p.pname,count(e.empno)
+from project p,assigned_to e
+where e.pno=p.pno
+group by p.pname;
+
+
+select empno,count(incentive_date)as number_of_times,sum(incentive_amt) as total_amt
+from incentives
+group by empno;
+
+select e.empno,e.empname
+from employee e
+where e.empno in (select empno from assigned_to where empno=e.empno and job_role='app developer');
+
+
+select deptno,avg(sal) as average
+from employee
+group by deptno;
