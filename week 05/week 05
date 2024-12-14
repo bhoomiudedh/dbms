@@ -11,19 +11,21 @@ create table dept(
 deptno int primary key,
 dname varchar(50),
 dloc varchar(50));
+primary key(deptno));
 
 create table employee(
-empno int primary key,
+empno int,
 empname varchar(50),
 mgr_no int,
 hiredate date,
 sal int,
 deptno int,
+primary key(empno),
 foreign key (deptno) references dept (deptno));
 
 create table incentives(
-empno int ,
-incentive_date date ,
+empno int,
+incentive_date date,
 incentive_amt int,
 primary key(empno,incentive_date),
 foreign key (empno) references employee (empno));
@@ -55,12 +57,12 @@ values(01,'cse','bengaluru'),
 insert into employee
 values (1,'bhoomika',3,'2015-04-19',15000,05),
 (2,'bhoomi',7,'2016-07-20',70000,02),
-(3,'divya',NULL,'2000-07-22',10000,05),
-(4,'prethi',3,'2028-10-02',10000,05),
+(3,'bhumi',NULL,'2000-07-22',10000,05),
+(4,'bhavana',3,'2028-10-02',10000,05),
 (5,'jyothi',7,'2020-11-18',8000,02),
-(6,'depthi',8,'2024-07-03',7000,03),
-(7,'keerthi',NULL,'1998-01-01',80000,02),
-(8,'stuthi',NULL,'2010-10-10',50000,03);
+(6,'deepthi',8,'2024-07-03',7000,03),
+(7,'shriya',NULL,'1998-01-01',80000,02),
+(8,'kavya',NULL,'2010-10-10',50000,03);
 
 insert into incentives
 values(4,'2020-11-12',3000),
