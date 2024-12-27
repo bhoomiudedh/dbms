@@ -1,17 +1,22 @@
 
 create database bhoomi066;
 use bhoomi066;
+
 create table project(
 pno int,
 ploc varchar(50),
 pname varchar(50),
 primary key (pno));
 
+desc project;
+
 create table dept(
-deptno int primary key,
+deptno int,
 dname varchar(50),
-dloc varchar(50));
+dloc varchar(50),
 primary key(deptno));
+
+desc dept;
 
 create table employee(
 empno int,
@@ -22,6 +27,7 @@ sal int,
 deptno int,
 primary key(empno),
 foreign key (deptno) references dept (deptno));
+desc employee;
 
 create table incentives(
 empno int,
@@ -30,6 +36,7 @@ incentive_amt int,
 primary key(empno,incentive_date),
 foreign key (empno) references employee (empno));
 
+desc incentives;
 create table assigned_to(
 empno int,
 pno int,
@@ -45,14 +52,15 @@ values(01,'bengaluru','apx'),
 (04,'delhi','ccg'),
 (05,'bengaluru','fpg'),
 (06,'chennai','express');
+select*from project;
 
 insert into dept
-values(01,'cse','bengaluru'),
-(02,'ise','mysuru'),
-(03,'cse','delhi'),
-(04,'ise','hyderabad'),
-(05,'hr','bengaluru'),
-(06,'managers','mysuru');
+values(1,'cse','bengaluru'),
+(2,'ise','mysuru'),
+(3,'cse','delhi'),
+(4,'ise','hyderabad'),
+(5,'hr','bengaluru');
+select * from dept;
 
 insert into employee
 values (1,'bhoomika',3,'2015-04-19',15000,05),
@@ -63,6 +71,7 @@ values (1,'bhoomika',3,'2015-04-19',15000,05),
 (6,'deepthi',8,'2024-07-03',7000,03),
 (7,'shriya',NULL,'1998-01-01',80000,02),
 (8,'kavya',NULL,'2010-10-10',50000,03);
+select*from employee;
 
 insert into incentives
 values(4,'2020-11-12',3000),
@@ -70,6 +79,7 @@ values(4,'2020-11-12',3000),
 (7,'2010-10-14',5000),
 (7,'2015-07-24',7000),
 (2,'2020-11-30',3000);
+select*from incentives;
 
 insert into assigned_to
 values(7,02,'manager'),
@@ -81,6 +91,7 @@ values(7,02,'manager'),
 (1,01,'worker'),
 (5,03,'worker'),
 (6,03,'head');
+select*from assigned_to;
 
 select e.empno
 from employee e, assigned_to a
@@ -88,7 +99,7 @@ where e.empno=a.empno and a.pno in(select pno
                                    from project
   where ploc in ('bengaluru' ,' hyderabad',' mysuru'));
                                    
-select empname
+select empno
 from employee
 where not exists(select 1
                  from incentives
@@ -97,8 +108,4 @@ where not exists(select 1
 select e.empno, e.empname, d.deptno, a.job_role, d.dloc ,p.ploc
 from employee e, project p,  assigned_to a, dept d
 where e.empno=a.empno and p.pno=a.pno and e.deptno=d.deptno and d.dloc=p.ploc;
-
-
-
-
 
