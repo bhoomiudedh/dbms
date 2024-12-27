@@ -1,6 +1,6 @@
-create database bhoomi;
-use bhoomi
-;
+create database bank;
+use bank;
+
 create table branch (
 branchname varchar(50),
 branchcity varchar(50),
