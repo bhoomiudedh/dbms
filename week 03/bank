@@ -6,24 +6,12 @@ branchname varchar(50),
 branchcity varchar(50),
 assets int,
 primary key (branchname));
-insert into branch
-values(SBI-chamrajpet,banglore, 50000),
-(SBI-residencyroad,banglore,10000),
-(SBI-shivajiroad,bombay,20000),
-(SBI-parlimentroad,delhi,10000),
-(SBI-jantarmantar,delhi,20000);
 
 create table bankcustomer(
 customername varchar(50),
 customer_street varchar(50),
 city varchar(50),
 primary key(customername));
-insert into bankcustomer
-values(avinash,bull-temple-road,banglore),
-(dinesh,bannergatta-road,banglore),
-(mohan,nationalcollege-road,banglore),
-(nikil,akbar-road,delhi),
-(ravi,prithviraj-road,delhi);
 
 create table bankaccount (
 accno int,
@@ -32,17 +20,6 @@ balance int,
 primary key (accno),
 
 foreign key (branchname) references branch (branchname));
-insert into bankaccount
-values(1,SBI-chamrajpet,2000),
-(2,SBI-residencyroad,5000),
-(3,SBI-shivajiroad,6000),
-(4,SBI-parlimentroad,9000),
-(5,SBI-jantarmantar,8000),
-(6,SBI-shivajiroad,4000),
-(8,SBI-residencyroad,4000),
-(9,SBI-parlimentroad,3000),
-(10,SBI-residencyroad,5000),
-(11,SBI-jantarmantar,2000);
 
 create table depositer(
 customername varchar(50),
@@ -50,15 +27,6 @@ accno int,
 primary key (customername, accno),
 foreign key (customername) references bankcustomer(customername),
 foreign key (accno) references bankaccount(accno));
-insert into depositer
-values(avinash,1),
-(dinesh,2),
-(nikil,4),
-(ravi,5),
-(avinash,8),
-(nikil,9),
-(dinesh,10),
-(nikil,11);
 
 create table loan(
 loannumber int,
@@ -67,21 +35,6 @@ branchname varchar(50),
 amount int,
 primary key (loannumber),
 foreign key (branchname) references branch (branchname));
-insert into loan
-values(1,SBI-chamrajpet,1000),
-(2,SBI-residencyroad,2000),
-(3,SBI-shivajiroad,3000),
-(4,SBI-parlimentroad,4000),
-(5,SBI-jantarmantar,5000);
-
-select branchname,assets as assets in lakhs
-from branch;
-
-select d.customername
-from bankaccount b, depositer d
-where b.accno=d.accno and branchname=SBI-residencyroad
-group by customername
-having count(*)=2;
 
 desc branch;
 desc bankaccount;
@@ -89,8 +42,67 @@ desc depositer;
 desc bankcustomer;
 desc loan;
 
+insert into branch
+values('SBI-chamrajpet','banglore', 50000),
+('SBI-residencyroad','banglore',10000),
+('SBI-shivajiroad','bombay',20000),
+('SBI-parlimentroad','delhi',10000),
+('SBI-jantarmantar','delhi',20000);
 select * from branch;
-select * from bankaccount;
-select * from depositer;
+
+insert into bankcustomer
+values('avinash','bull-temple-road','banglore'),
+('dinesh','bannergatta-road','banglore'),
+('mohan','nationalcollege-road','banglore'),
+('nikil','akbar-road','delhi'),
+('ravi','prithviraj-road','delhi');
 select * from bankcustomer;
+
+insert into bankaccount
+values(1,'SBI-chamrajpet',2000),
+(2,'SBI-residencyroad',5000),
+(3,'SBI-shivajiroad',6000),
+(4,'SBI-parlimentroad',9000),
+(5,'SBI-jantarmantar',8000),
+(6,'SBI-shivajiroad',4000),
+(8,'SBI-residencyroad',4000),
+(9,'SBI-parlimentroad',3000),
+(10,'SBI-residencyroad',5000),
+(11,'SBI-jantarmantar',2000);
+select * from bankaccount;
+
+insert into depositer
+values('avinash',1),
+('dinesh',2),
+('nikil',4),
+('ravi',5),
+('avinash',8),
+('nikil',9),
+('dinesh',10),
+('nikil',11);
+select * from depositer;
+
+insert into loan
+values(1,'SBI-chamrajpet',1000),
+(2,'SBI-residencyroad',2000),
+(3,'SBI-shivajiroad',3000),
+(4,'SBI-parlimentroad',4000),
+(5,'SBI-jantarmantar',5000);
 select * from loan;
+
+select branchname,assets as assets_in_lakhs
+from branch;
+
+select d.customername
+from bankaccount b, depositer d
+where b.accno=d.accno and branchname='SBI-residencyroad'
+group by customername
+having count(*)=2;
+
+create view branch_loan_summary AS
+select branchname, SUM(amount) AS total_loans
+from loan
+GROUP BY branchname;
+select * from branch_loan_summary;
+
+
