@@ -91,5 +91,4 @@ from accident;
 select driver_id
 from participated
 where damage_amt>=25000;
-dbms week_1.txt
-Displaying dbms week_1.txt.
+
