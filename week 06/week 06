@@ -38,6 +38,16 @@ from project p,assigned_to e
 where e.pno=p.pno
 group by p.pname;
 
+SELECT e1.empname AS employee_name,
+       e1.empno AS employee_number,
+       e1.deptno,
+       d.dname AS department_name,
+       d.dloc AS department_location,
+       e2.empname AS manager_name
+FROM employee e1
+JOIN employee e2 ON e1.mgr_no = e2.empno
+JOIN dept d ON e1.deptno = d.deptno
+ORDER BY e2.empname, e1.empname;
 
 select empno,count(incentive_date)as number_of_times,sum(incentive_amt) as total_amt
 from incentives
